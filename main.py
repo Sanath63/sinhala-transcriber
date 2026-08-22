@@ -24,7 +24,15 @@ async def upload_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
+    segments, info = model.transcribe(file_path)
+
+    transcript = ""
+
+    for segment in segments:
+        transcript += segment.text + " "
+
     return {
         "filename": file.filename,
-        "message": "File uploaded and saved successfully"
+        "language": info.language,
+        "transcript": transcript
     }
