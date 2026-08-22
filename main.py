@@ -1,10 +1,13 @@
 from fastapi import FastAPI, UploadFile, File
+from faster_whisper import WhisperModel
 import os
 
 app = FastAPI()
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+model = WhisperModel("base")
 
 
 @app.get("/")
