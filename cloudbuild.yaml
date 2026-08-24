@@ -1,13 +1,15 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/sinhala-transcriber'
-      - '.'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
+  - '.'
 
 images:
-  - 'gcr.io/$PROJECT_ID/sinhala-transcriber'
+
+- 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
 
 options:
   logging: CLOUD_LOGGING_ONLY
