@@ -1,21 +1,24 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request
 from faster_whisper import WhisperModel
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 import os
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 model = WhisperModel("base")
 
-
-@app.get("/")
-def home():
-    return {
-        "message": "Welcome to Sinhala Transcriber"
-    }
-
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -34,5 +37,5 @@ async def upload_file(file: UploadFile = File(...)):
     return {
         "filename": file.filename,
         "language": info.language,
-        "transcript": transcript
+        "transcript": transcript.strip()
     }
