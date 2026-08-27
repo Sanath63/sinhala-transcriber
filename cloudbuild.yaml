@@ -1,15 +1,32 @@
 steps:
 
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'build'
-  - '-t'
-  - 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
-  - '.'
+  # 1. Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
+      - '.'
 
-images:
+  # 2. Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
 
-- 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
+  # 3. Deploy the image to the existing Cloud Run service
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'sinhala-transcriber'
+      - '--image'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/sinhala-transcriber/sinhala-transcriber'
+      - '--region'
+      - 'europe-west1'
+      - '--platform'
+      - 'managed'
 
 options:
   logging: CLOUD_LOGGING_ONLY
