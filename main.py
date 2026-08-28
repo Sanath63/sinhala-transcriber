@@ -13,11 +13,12 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 model = WhisperModel("base")
 
-@app.get("/")
-async def home():
-    return {
-        "message": "NEW VERSION TEST"
-    }
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
