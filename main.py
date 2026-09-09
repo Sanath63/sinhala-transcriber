@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Request
-from faster_whisper import WhisperModel
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from faster_whisper import WhisperModel
 import os
 
 app = FastAPI()
@@ -11,13 +11,17 @@ templates = Jinja2Templates(directory="templates")
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-model = WhisperModel("base")
+model = WhisperModel(
+    "base",
+    device="cpu",
+    compute_type="int8"
+)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
+        request=request,
+        name="index.html"
     )
 
 @app.post("/upload")
