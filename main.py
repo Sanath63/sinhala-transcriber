@@ -12,7 +12,7 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 model = WhisperModel(
-    "base",
+    "tiny",
     device="cpu",
     compute_type="int8"
 )
