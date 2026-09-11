@@ -12,7 +12,7 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 model = WhisperModel(
-    "tiny",
+    "small",
     device="cpu",
     compute_type="int8"
 )
@@ -31,7 +31,11 @@ async def upload_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
-    segments, info = model.transcribe(file_path)
+    segments, info = model.transcribe(
+    file_path,
+    beam_size=5,
+    vad_filter=True
+)
 
     transcript = ""
 
