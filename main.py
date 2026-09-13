@@ -33,7 +33,6 @@ async def upload_file(file: UploadFile = File(...)):
 
 segments, info = model.transcribe(
     file_path,
-    language="si",
     beam_size=5,
     vad_filter=True
 )
