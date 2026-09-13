@@ -31,12 +31,12 @@ async def upload_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
-    segments, info = model.transcribe(
+segments, info = model.transcribe(
     file_path,
+    language="si",
     beam_size=5,
     vad_filter=True
 )
-
     transcript = ""
 
     for segment in segments:
